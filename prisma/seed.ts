@@ -32,10 +32,10 @@ async function main() {
       ('11', 'Tubos y Anillos', 'Tubos metalicos, bujes, anillos retencion'),
       ('12', 'Manijas', 'Manijas acelerador, freno de mano, apertura'),
       ('13', 'Troqueles y Kits', 'Troqueles grafadores, kits pre-armados'),
-      ('FLV', 'Flexoindustrial VLD', 'Very Light Duty - trabajo muy liviano'),
-      ('FLL', 'Flexoindustrial LD', 'Light Duty - trabajo liviano'),
-      ('FLM', 'Flexoindustrial MD', 'Medium Duty - trabajo medio'),
-      ('FLH', 'Flexoindustrial HD', 'Heavy Duty - trabajo pesado')
+      ('HER', 'Herramientas', 'Herramientas manuales y electricas'),
+      ('CON', 'Construccion', 'Cemento, bloques, arena, agregados'),
+      ('PIN', 'Pinturas', 'Pinturas, solventes y brochas'),
+      ('TOR', 'Tornilleria', 'Tornillos, clavos, tuercas y anclajes')
     ON CONFLICT (code) DO UPDATE SET
       name = EXCLUDED.name,
       description = EXCLUDED.description,
@@ -113,7 +113,7 @@ async function main() {
       ('IvaPercentage', '13', 'IVA vigente en El Salvador (%)'),
       ('Currency', 'USD', 'Moneda operativa'),
       ('SessionTimeoutMinutes', '30', 'Minutos de inactividad antes de cerrar sesion'),
-      ('BusinessName', 'FlexoCable El Salvador', 'Nombre para impresion en tickets')
+      ('BusinessName', 'Ferreteria', 'Nombre para impresion en tickets')
     ON CONFLICT ("Key") DO UPDATE SET
       "Value" = EXCLUDED."Value",
       "Description" = EXCLUDED."Description",

@@ -1,8 +1,8 @@
 {
-  "name": "flexocable-backend",
+  "name": "ferreteria-backend",
   "version": "0.1.0",
   "private": true,
-  "description": "FlexoCable SV — API administrativa (catálogo, compras, RRHH, planilla, fiscal)",
+  "description": "Ferreteria — API administrativa (catálogo, compras, RRHH, planilla, fiscal)",
   "scripts": {
     "db:generate":      "prisma generate",
     "db:push":          "prisma db push",

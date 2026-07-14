@@ -1,5 +1,5 @@
 // =============================================================================
-// FlexoCable SV — Prisma schema v3.0 (admin API / Node)
+// Ferreteria — Prisma schema v3.0 (admin API / Node)
 // Esquemas: public, purchasing, sales, dte, fiscal, hr, system
 // WPF caja usa EF Core sobre la misma base PostgreSQL/Supabase.
 // UUID gen_random_uuid() en todas las tablas de negocio.

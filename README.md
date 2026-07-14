@@ -1,11 +1,11 @@
-﻿# ferreteria_backend
+# ferreteria_backend
 
 > **Nombre:** Ferretería Backend — API REST administrativa  
-> **Descripción:** API Node.js (Express + Prisma) que centraliza RRHH, planilla, inventario administrativo, compras, libros de IVA, reportes, Excel/PDF y dashboard BI para FlexoCable SV. Consume la misma PostgreSQL que la caja WPF.
+> **Descripción:** API Node.js (Express + Prisma) que centraliza RRHH, planilla, inventario administrativo, compras, libros de IVA, reportes, Excel/PDF y dashboard BI para Ferreteria. Consume la misma PostgreSQL que la caja WPF.
 
-API REST administrativa de **FlexoCable SV**. Centraliza reglas de negocio que la caja WPF no implementa: RRHH, planilla, inventario administrativo, compras, libros de IVA, reportes, importación/exportación Excel y dashboard BI.
+API REST administrativa de **Ferreteria**. Centraliza reglas de negocio que la caja WPF no implementa: RRHH, planilla, inventario administrativo, compras, libros de IVA, reportes, importación/exportación Excel y dashboard BI.
 
-> **Documento maestro:** [`../erp_ferreteria/docs/FLEXOCABLE_PLAN_FINALIZACION_APP.md`](../erp_ferreteria/docs/FLEXOCABLE_PLAN_FINALIZACION_APP.md) (v3.0)  
+> **Documento maestro:** [`../erp_ferreteria/docs/FERRETERIA_PLAN_FINALIZACION_APP.md`](../erp_ferreteria/docs/FERRETERIA_PLAN_FINALIZACION_APP.md) (v3.0)  
 > **Frontend asociado:** [`../ferreteria_adminweb/README.md`](../ferreteria_adminweb/README.md)  
 > **Caja WPF:** [`../erp_ferreteria/README.md`](../erp_ferreteria/README.md)
 
@@ -36,7 +36,7 @@ API REST administrativa de **FlexoCable SV**. Centraliza reglas de negocio que l
 └─────────────────────┘                               └──────────┬───────────┘
                                                                    │
 ┌─────────────────────┐                                            │
-│  FlexoCable WPF     │  ─── EF Core (operación caja) ─────────────┤
+│  Ferreteria WPF     │  ─── EF Core (operación caja) ─────────────┤
 │  (erp_ferreteria)   │                                            ▼
 └─────────────────────┘                               ┌──────────────────────┐
                                                       │  PostgreSQL / Supabase │
@@ -46,7 +46,7 @@ API REST administrativa de **FlexoCable SV**. Centraliza reglas de negocio que l
 
 | Responsabilidad | ¿Quién la implementa? |
 |---|---|
-| Ventas, DTE, impresión, PIN de caja | WPF (`FlexoCableSV.PuntoVenta`) |
+| Ventas, DTE, impresión, PIN de caja | WPF (`Ferreteria.PuntoVenta`) |
 | Login administrativo (`system.WebUsers`) | **Este repositorio** |
 | CRUD empleados, expediente, PIN hash | **Este repositorio** |
 | Planilla quincenal/mensual/semanal | **Este repositorio** (referencia: `beraka-core-api`) |
@@ -127,7 +127,7 @@ npm run db:seed
 `DATABASE_URL` por defecto:
 
 ```
-postgresql://flexo_user:flexo_dev_password@localhost:55432/flexocable
+postgresql://ferreteria_user:ferreteria_dev_password@localhost:55432/ferreteria
 ```
 
 ### Producción
@@ -247,7 +247,7 @@ Estructura objetivo bajo `src/modules/` (Fase 8 en adelante):
 
 Portar lógica probada de `beraka-core-api`:
 
-| Artefacto Beraka | Uso en FlexoCable |
+| Artefacto Beraka | Uso en Ferreteria |
 |---|---|
 | `payroll.calculator.ts` | AFP, ISSS, ISR, horas extra |
 | `payroll.builder.ts` | Líneas planilla vs honorarios |
@@ -359,7 +359,7 @@ npm run docker:reset   # Reiniciar BD local (borra datos)
 
 ## Roadmap por fases
 
-Alineado a `FLEXOCABLE_PLAN_FINALIZACION_APP.md`:
+Alineado a `FERRETERIA_PLAN_FINALIZACION_APP.md`:
 
 | Fase | Alcance backend | Estado |
 |---|---|---|
@@ -391,4 +391,4 @@ Alineado a `FLEXOCABLE_PLAN_FINALIZACION_APP.md`:
 
 ## Licencia
 
-Copyright (c) 2026 FlexoCable El Salvador, S.A. de C.V. — Todos los derechos reservados.
+Copyright (c) 2026 Ferreteria — Todos los derechos reservados.
