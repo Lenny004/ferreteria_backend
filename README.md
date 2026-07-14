@@ -1,10 +1,13 @@
-# FlexoCable-backend
+﻿# ferreteria_backend
+
+> **Nombre:** Ferretería Backend — API REST administrativa  
+> **Descripción:** API Node.js (Express + Prisma) que centraliza RRHH, planilla, inventario administrativo, compras, libros de IVA, reportes, Excel/PDF y dashboard BI para FlexoCable SV. Consume la misma PostgreSQL que la caja WPF.
 
 API REST administrativa de **FlexoCable SV**. Centraliza reglas de negocio que la caja WPF no implementa: RRHH, planilla, inventario administrativo, compras, libros de IVA, reportes, importación/exportación Excel y dashboard BI.
 
-> **Documento maestro:** [`../FlexoCable/docs/FLEXOCABLE_PLAN_FINALIZACION_APP.md`](../FlexoCable/docs/FLEXOCABLE_PLAN_FINALIZACION_APP.md) (v3.0)  
-> **Frontend asociado:** [`../FlexoCable-adminweb/README.md`](../FlexoCable-adminweb/README.md)  
-> **Caja WPF:** [`../FlexoCable/README.md`](../FlexoCable/README.md)
+> **Documento maestro:** [`../erp_ferreteria/docs/FLEXOCABLE_PLAN_FINALIZACION_APP.md`](../erp_ferreteria/docs/FLEXOCABLE_PLAN_FINALIZACION_APP.md) (v3.0)  
+> **Frontend asociado:** [`../ferreteria_adminweb/README.md`](../ferreteria_adminweb/README.md)  
+> **Caja WPF:** [`../erp_ferreteria/README.md`](../erp_ferreteria/README.md)
 
 ---
 
@@ -28,13 +31,13 @@ API REST administrativa de **FlexoCable SV**. Centraliza reglas de negocio que l
 
 ```
 ┌─────────────────────┐         HTTP /api/v1          ┌──────────────────────┐
-│  FlexoCable-adminweb │  ──────────────────────────►  │  FlexoCable-backend  │
+│  ferreteria_adminweb │  ──────────────────────────►  │  ferreteria_backend  │
 │  (Next.js 15)        │         JWT + JSON            │  (Express 5 + Prisma) │
 └─────────────────────┘                               └──────────┬───────────┘
                                                                    │
 ┌─────────────────────┐                                            │
 │  FlexoCable WPF     │  ─── EF Core (operación caja) ─────────────┤
-│  (Punto de venta)   │                                            ▼
+│  (erp_ferreteria)   │                                            ▼
 └─────────────────────┘                               ┌──────────────────────┐
                                                       │  PostgreSQL / Supabase │
                                                       │  Esquema único UUID    │
@@ -256,7 +259,7 @@ Portar lógica probada de `beraka-core-api`:
 ## Estructura del proyecto
 
 ```
-FlexoCable-backend/
+ferreteria_backend/
 ├── package.json
 ├── tsconfig.json                 # (pendiente Fase 8)
 ├── docker-compose.yml            # PostgreSQL local :55432
@@ -301,7 +304,7 @@ FlexoCable-backend/
 
 ```bash
 # Clonar y entrar al repo
-cd FlexoCable-backend
+cd ferreteria_backend
 
 # Base de datos
 docker compose up -d

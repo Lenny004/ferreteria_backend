@@ -1,4 +1,4 @@
-# Base de datos — FlexoCable-backend
+﻿# Base de datos — ferreteria_backend
 
 ## Fuente de verdad (v3.0)
 
@@ -7,7 +7,7 @@ Desde el plan v3.0, el esquema se define en **`prisma/schema.prisma`**. Las tabl
 ## Instalación nueva (recomendado)
 
 ```bash
-cd FlexoCable-backend
+cd ferreteria_backend
 docker compose up -d
 cp .env.example .env
 npm install
