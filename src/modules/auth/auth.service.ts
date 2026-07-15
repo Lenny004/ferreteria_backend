@@ -1,6 +1,6 @@
 import bcrypt from "bcryptjs";
 import { prisma } from "../../lib/prisma.js";
-import { AppError } from "../../shared/errors.js";
+import { AppError, BadRequestError } from "../../shared/errors.js";
 import { signAccessToken } from "../../shared/jwt.js";
 
 const webUserPublicSelect = {
@@ -73,11 +73,11 @@ export const authService = {
 
     const ok = await bcrypt.compare(currentPassword, user.passwordHash);
     if (!ok) {
-      throw new AppError("INVALID_CREDENTIALS", "Contraseña actual incorrecta", 400);
+      throw new BadRequestError("Contraseña actual incorrecta");
     }
 
     if (newPassword.length < 8) {
-      throw new AppError("VALIDATION", "La nueva contraseña debe tener al menos 8 caracteres", 400);
+      throw new BadRequestError("La nueva contraseña debe tener al menos 8 caracteres");
     }
 
     const passwordHash = await bcrypt.hash(newPassword, 10);
