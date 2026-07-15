@@ -13,6 +13,12 @@ import {
 import customersRoutes from "./modules/customers/customers.routes.js";
 import productsRoutes from "./modules/products/products.routes.js";
 import inventoryRoutes from "./modules/inventory/inventory.routes.js";
+import {
+  suppliersRouter,
+  purchaseOrdersRouter,
+} from "./modules/purchasing/purchasing.routes.js";
+import payrollPeriodsRoutes from "./modules/payroll-periods/payroll-periods.routes.js";
+import payrollRunsRoutes from "./modules/payroll-runs/payroll-runs.routes.js";
 
 function resolveCorsOrigins(): string[] {
   const configured = (process.env.CORS_ORIGIN ?? "")
@@ -58,6 +64,10 @@ app.use("/api/v1/positions", positionsRouter);
 app.use("/api/v1/customers", customersRoutes);
 app.use("/api/v1/products", productsRoutes);
 app.use("/api/v1/inventory", inventoryRoutes);
+app.use("/api/v1/suppliers", suppliersRouter);
+app.use("/api/v1/purchase-orders", purchaseOrdersRouter);
+app.use("/api/v1/payroll-periods", payrollPeriodsRoutes);
+app.use("/api/v1/payroll-runs", payrollRunsRoutes);
 
 app.use(errorHandler);
 
