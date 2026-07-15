@@ -64,4 +64,28 @@ export const authService = {
 
     return user;
   },
+
+  async changePassword(userId: string, currentPassword: string, newPassword: string) {
+    const user = await prisma.webUser.findUnique({ where: { id: userId } });
+    if (!user || !user.isActive) {
+      throw new AppError("UNAUTHORIZED", "Sesión inválida", 401);
+    }
+
+    const ok = await bcrypt.compare(currentPassword, user.passwordHash);
+    if (!ok) {
+      throw new AppError("INVALID_CREDENTIALS", "Contraseña actual incorrecta", 400);
+    }
+
+    if (newPassword.length < 8) {
+      throw new AppError("VALIDATION", "La nueva contraseña debe tener al menos 8 caracteres", 400);
+    }
+
+    const passwordHash = await bcrypt.hash(newPassword, 10);
+    await prisma.webUser.update({
+      where: { id: userId },
+      data: { passwordHash, updatedAt: new Date() },
+    });
+
+    return { changed: true };
+  },
 };
