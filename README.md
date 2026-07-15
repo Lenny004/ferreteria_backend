@@ -49,7 +49,7 @@ API REST administrativa de **Ferreteria**. Centraliza reglas de negocio que la c
 | Ventas, DTE, impresión, PIN de caja | WPF (`Ferreteria.PuntoVenta`) |
 | Login administrativo (`system.WebUsers`) | **Este repositorio** |
 | CRUD empleados, expediente, PIN hash | **Este repositorio** |
-| Planilla quincenal/mensual/semanal | **Este repositorio** (referencia: `beraka-core-api`) |
+| Planilla quincenal/mensual/semanal | **Este repositorio** (referencia: `erp-core-api`) |
 | Inventario admin (entradas, ajustes, Kardex) | **Este repositorio** |
 | Compras, proveedores, costo promedio ponderado | **Este repositorio** |
 | Libros de IVA | **Este repositorio** |
@@ -83,8 +83,8 @@ La caja **no** consume esta API en el MVP inicial; escribe directamente en Postg
 | `prisma/seed.ts` | ✅ Implementado | Tipos de medida, familias, empleados demo, Consumidor Final |
 | `docker-compose.yml` | ✅ Implementado | PostgreSQL local puerto **55432** |
 | `database/init.sql` | ✅ Implementado | Extensiones, esquemas y permisos iniciales |
-| `src/` Express API | 🔲 Pendiente | Scaffold planificado en Fase 8 |
-| Módulos `auth`, `employees`, `payroll-runs`, etc. | 🔲 Pendiente | Ver [Módulos API planificados](#módulos-api-planificados) |
+| `src/` Express API | ✅ Fase 8 (base) | Auth JWT + CRUD empleados/bancos/clientes/productos |
+| Módulos `auth`, `employees`, catálogo | ✅ Fase 8 | Planilla/inventario/compras pendientes (Fases 9–10) |
 | Tests | 🔲 Pendiente | Fase 10+ |
 
 **Regla operativa:** desde v3.0, `prisma/schema.prisma` es la fuente principal del schema. No ejecutar `Squema.sql` legacy y Prisma sobre la misma BD sin coordinación.
@@ -219,7 +219,7 @@ Estructura objetivo bajo `src/modules/` (Fase 8 en adelante):
 | `required-document-types` | `/api/v1/document-types` | 8 | Tipos de documento requerido |
 | `products` | `/api/v1/products` | 8–9 | CRUD catálogo |
 | `customers` | `/api/v1/customers` | 8 | Maestro fiscal de clientes |
-| `inventory` | `/api/v1/inventory` | 9 | Entradas, ajustes, movimientos, alertas |
+| `inventory` | `/api/v1/inventory` | 9 | ✅ Entradas, ajustes, Kardex, alertas, import JSON |
 | `suppliers` | `/api/v1/suppliers` | 9b | Maestro de proveedores |
 | `purchase-orders` | `/api/v1/purchase-orders` | 9b | Órdenes de compra y recepción |
 | `imports` | `/api/v1/import` | 9 | Excel catálogo y entradas |
@@ -245,14 +245,17 @@ Estructura objetivo bajo `src/modules/` (Fase 8 en adelante):
 
 ### Referencia funcional planilla
 
-Portar lógica probada de `beraka-core-api`:
+Portar lógica probada de `erp-core-api` (`C:\Users\lenny\Documents\ERP\erp-core-api`):
 
-| Artefacto Beraka | Uso en Ferreteria |
+| Artefacto erp-core-api | Uso en Ferreteria |
 |---|---|
 | `payroll.calculator.ts` | AFP, ISSS, ISR, horas extra |
 | `payroll.builder.ts` | Líneas planilla vs honorarios |
 | `payroll-runs.service.ts` | Generar, aprobar, pagar corridas |
 | `payroll-exports.service.ts` | Excel multi-hoja + PDF comprobantes |
+
+UI RRHH/planilla: portar pantallas desde `erp-admin-web` hacia `ferreteria_adminweb`.  
+Plan detallado: `../erp_ferreteria/docs/FERRETERIA_PLAN_BACKEND_API_2026.md`.
 
 ---
 
@@ -261,31 +264,35 @@ Portar lógica probada de `beraka-core-api`:
 ```
 ferreteria_backend/
 ├── package.json
-├── tsconfig.json                 # (pendiente Fase 8)
+├── tsconfig.json
 ├── docker-compose.yml            # PostgreSQL local :55432
 ├── .env.example
 ├── prisma/
 │   ├── schema.prisma             # ✅ Fuente de verdad v3.0
-│   ├── seed.ts                   # ✅ Seeds idempotentes
+│   ├── seed.ts                   # ✅ Seeds idempotentes (+ WebUser admin)
 │   └── migrations/               # (pendiente al congelar schema)
 ├── database/
 │   ├── init.sql                  # Bootstrap Docker
-│   └── README.md                 # Notas de migración legacy
-└── src/                          # 🔲 Pendiente Fase 8
+│   └── README.md
+└── src/                          # ✅ Fase 8 (base)
     ├── server.ts
     ├── app.ts
-    ├── config/
     ├── modules/
     │   ├── auth/
     │   ├── employees/
-    │   ├── payroll-runs/
-    │   ├── inventory/
-    │   ├── purchasing/
+    │   ├── banks/
+    │   ├── document-types/
+    │   ├── catalogs/
+    │   ├── customers/
+    │   ├── products/
+    │   ├── payroll-runs/         # Fase 10 ← erp-core-api
+    │   ├── inventory/            # Fase 9
+    │   ├── purchasing/           # Fase 9b
     │   ├── fiscal/
     │   └── dashboard/
     ├── middleware/
     ├── lib/
-    └── schemas/
+    └── shared/
 ```
 
 ---
@@ -313,7 +320,7 @@ npm install
 npm run db:push
 npm run db:seed
 
-# Cuando exista la API (Fase 8)
+# API administrativa (Fase 8+)
 npm run dev
 ```
 
@@ -365,8 +372,8 @@ Alineado a `FERRETERIA_PLAN_FINALIZACION_APP.md`:
 |---|---|---|
 | **0** | Schema Prisma v3.0, seeds, Docker | ✅ En progreso |
 | **0b** | Esquema `hr` Periodo+Corrida, bancos, ISR, documentos | ✅ Schema listo |
-| **8** | Scaffold Express, auth JWT, CRUD empleados/clientes/catálogo | 🔲 Pendiente |
-| **9** | Inventario administrativo, ajustes, alertas | 🔲 Pendiente |
+| **8** | Scaffold Express, auth JWT, CRUD empleados/clientes/catálogo | ✅ En curso |
+| **9** | Inventario administrativo, ajustes, alertas | ✅ Base |
 | **9b** | Proveedores, OC, Kardex valorado, costo promedio | 🔲 Pendiente |
 | **10** | Planilla quincenal, Excel/PDF, aguinaldo, vacaciones, liquidaciones | 🔲 Pendiente |
 | **10d** | Libros de IVA desde DTEs y compras | 🔲 Pendiente |
@@ -385,7 +392,8 @@ Alineado a `FERRETERIA_PLAN_FINALIZACION_APP.md`:
 | WPF vs API | MVP: WPF directo a PostgreSQL; admin vía API Node |
 | Excel | Import/export **solo** en backend (ExcelJS) |
 | Planilla | Quincenal principal + mensual/semanal; honorarios 10% ISR |
-| Referencia RRHH | `beraka-core-api` — no reimplementar motor legal desde cero |
+| Referencia RRHH | `erp-core-api` — no reimplementar motor legal desde cero |
+| Referencia UI RRHH | `erp-admin-web` — portar pantallas a `ferreteria_adminweb` |
 
 ---
 
