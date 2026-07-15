@@ -24,6 +24,8 @@ import vacationBalancesRoutes from "./modules/vacation-balances/vacation-balance
 import leaveTypesRoutes from "./modules/leave-types/leave-types.routes.js";
 import leaveRequestsRoutes from "./modules/leave-requests/leave-requests.routes.js";
 import employeeTerminationsRoutes from "./modules/employee-terminations/employee-terminations.routes.js";
+import fiscalRoutes from "./modules/fiscal/fiscal.routes.js";
+import dashboardRoutes from "./modules/dashboard/dashboard.routes.js";
 
 function resolveCorsOrigins(): string[] {
   const configured = (process.env.CORS_ORIGIN ?? "")
@@ -78,6 +80,8 @@ app.use("/api/v1/vacation-balances", vacationBalancesRoutes);
 app.use("/api/v1/leave-types", leaveTypesRoutes);
 app.use("/api/v1/leave-requests", leaveRequestsRoutes);
 app.use("/api/v1/employee-terminations", employeeTerminationsRoutes);
+app.use("/api/v1/fiscal", fiscalRoutes);
+app.use("/api/v1/dashboard", dashboardRoutes);
 
 app.use(errorHandler);
 
