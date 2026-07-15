@@ -1,6 +1,7 @@
 import type { Request, Response, NextFunction } from "express";
 import { z } from "zod";
 import * as service from "./payroll-runs.service.js";
+import * as exportsService from "./payroll-exports.service.js";
 import { jsonSuccess } from "../../shared/api-response.js";
 import { PAYROLL_RUN_STATUSES } from "./payroll.constants.js";
 
@@ -124,6 +125,50 @@ export async function deletePayrollRun(req: Request, res: Response, next: NextFu
     const { id } = IdParamSchema.parse(req.params);
     await service.deletePayrollRun(id);
     res.status(204).end();
+  } catch (err) {
+    next(err);
+  }
+}
+
+// ─── Exportación de archivos ──────────────────────────────────────────────────
+
+function sendFileBuffer(res: Response, buffer: Buffer, contentType: string, filename: string): void {
+  res.setHeader("Content-Type", contentType);
+  res.setHeader("Content-Disposition", `attachment; filename="${filename}"`);
+  res.setHeader("Content-Length", buffer.length.toString());
+  res.send(buffer);
+}
+
+const XLSX_CONTENT_TYPE = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+
+/** GET `/:id/export/excel` — Excel de detalle de planilla con fila de totales. */
+export async function exportPayrollExcel(req: Request, res: Response, next: NextFunction): Promise<void> {
+  try {
+    const { id } = IdParamSchema.parse(req.params);
+    const buffer = await exportsService.generatePayrollExcel(id);
+    sendFileBuffer(res, buffer, XLSX_CONTENT_TYPE, `planilla-${id}.xlsx`);
+  } catch (err) {
+    next(err);
+  }
+}
+
+/** GET `/:id/export/receipts-pdf` — PDF con una boleta de pago por empleado. */
+export async function exportReceiptsPdf(req: Request, res: Response, next: NextFunction): Promise<void> {
+  try {
+    const { id } = IdParamSchema.parse(req.params);
+    const buffer = await exportsService.generateAllReceiptsPdf(id);
+    sendFileBuffer(res, buffer, "application/pdf", `boletas-${id}.pdf`);
+  } catch (err) {
+    next(err);
+  }
+}
+
+/** GET `/:id/export/planilla-unica` — Excel de Planilla Única de Cotizaciones AFP/ISSS. */
+export async function exportPlanillaUnica(req: Request, res: Response, next: NextFunction): Promise<void> {
+  try {
+    const { id } = IdParamSchema.parse(req.params);
+    const buffer = await exportsService.generatePlanillaUnicaExcel(id);
+    sendFileBuffer(res, buffer, XLSX_CONTENT_TYPE, `planilla-unica-${id}.xlsx`);
   } catch (err) {
     next(err);
   }

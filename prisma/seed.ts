@@ -133,6 +133,21 @@ async function seedDemoData(): Promise<void> {
       "CanCashier" = TRUE,
       "IsActive" = TRUE;
 
+    -- LeaveType: catálogo básico de ausencias para vacaciones/permisos/bajas médicas (Fase 10b).
+    INSERT INTO hr."LeaveTypes" (name, category, "MaxDaysPerYear", "RequiresDocument", "IsPaid", "AffectsVacationAccrual", "LegalBasis") VALUES
+      ('Vacaciones', 'VACACIONES', 15, FALSE, TRUE, FALSE, 'Código de Trabajo Art. 177'),
+      ('Permiso con goce de sueldo', 'PERMISO_CON_GOCE', NULL, FALSE, TRUE, FALSE, NULL),
+      ('Permiso sin goce de sueldo', 'PERMISO_SIN_GOCE', NULL, FALSE, FALSE, FALSE, NULL),
+      ('Baja médica', 'BAJA_MEDICA', NULL, TRUE, TRUE, FALSE, 'Ley del ISSS')
+    ON CONFLICT (name) DO UPDATE SET
+      category = EXCLUDED.category,
+      "MaxDaysPerYear" = EXCLUDED."MaxDaysPerYear",
+      "RequiresDocument" = EXCLUDED."RequiresDocument",
+      "IsPaid" = EXCLUDED."IsPaid",
+      "AffectsVacationAccrual" = EXCLUDED."AffectsVacationAccrual",
+      "LegalBasis" = EXCLUDED."LegalBasis",
+      "IsActive" = TRUE;
+
     -- Setting: parámetros operativos leídos por caja WPF y futura API admin.
     INSERT INTO system."Settings" ("Key", "Value", "Description") VALUES
       ('IvaPercentage', '13', 'IVA vigente en El Salvador (%)'),
