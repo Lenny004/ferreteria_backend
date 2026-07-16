@@ -15,6 +15,11 @@ const listQuerySchema = z.object({
     .enum(["true", "false"])
     .optional()
     .transform((v) => (v === undefined ? undefined : v === "true")),
+  country: z.string().min(2).max(5).optional(),
+  withCredit: z
+    .enum(["true", "false"])
+    .optional()
+    .transform((v) => (v === undefined ? undefined : v === "true")),
 });
 
 const createSchema = z.object({

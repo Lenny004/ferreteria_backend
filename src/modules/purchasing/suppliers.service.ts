@@ -8,9 +8,18 @@ import { NotFoundError } from "../../shared/errors.js";
 
 export const suppliersService = {
   /** Lista proveedores; por defecto solo activos (`activeOnly !== false`). */
-  async list(params: { q?: string; take?: number; skip?: number; activeOnly?: boolean }) {
+  async list(params: {
+    q?: string;
+    take?: number;
+    skip?: number;
+    activeOnly?: boolean;
+    country?: string;
+    withCredit?: boolean;
+  }) {
     const where: Prisma.SupplierWhereInput = {};
     if (params.activeOnly !== false) where.isActive = true;
+    if (params.country) where.country = params.country;
+    if (params.withCredit === true) where.creditDays = { gt: 0 };
     if (params.q) {
       where.OR = [
         { name: { contains: params.q, mode: "insensitive" } },
