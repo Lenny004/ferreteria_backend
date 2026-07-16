@@ -12,6 +12,15 @@ const listQuerySchema = z.object({
     .enum(["true", "false"])
     .optional()
     .transform((v) => (v === undefined ? undefined : v === "true")),
+  departmentId: z.string().uuid().optional(),
+  canSell: z
+    .enum(["true", "false"])
+    .optional()
+    .transform((v) => (v === undefined ? undefined : v === "true")),
+  canCashier: z
+    .enum(["true", "false"])
+    .optional()
+    .transform((v) => (v === undefined ? undefined : v === "true")),
   take: z.coerce.number().int().positive().max(200).optional(),
   skip: z.coerce.number().int().nonnegative().optional(),
 });

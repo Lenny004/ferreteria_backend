@@ -33,9 +33,20 @@ const employeePublicSelect = {
 
 export const employeesService = {
   /** Lista empleados con paginación; `take` máximo 200. No expone `pinHash`. */
-  async list(params: { q?: string; isActive?: boolean; take?: number; skip?: number }) {
+  async list(params: {
+    q?: string;
+    isActive?: boolean;
+    departmentId?: string;
+    canSell?: boolean;
+    canCashier?: boolean;
+    take?: number;
+    skip?: number;
+  }) {
     const where: Prisma.EmployeeWhereInput = {};
     if (params.isActive !== undefined) where.isActive = params.isActive;
+    if (params.departmentId) where.departmentId = params.departmentId;
+    if (params.canSell !== undefined) where.canSell = params.canSell;
+    if (params.canCashier !== undefined) where.canCashier = params.canCashier;
     if (params.q) {
       where.OR = [
         { firstName: { contains: params.q, mode: "insensitive" } },
