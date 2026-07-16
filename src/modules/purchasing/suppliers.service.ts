@@ -1,8 +1,13 @@
+/**
+ * Servicio de proveedores para órdenes de compra y libros fiscales.
+ */
+
 import type { Prisma } from "@prisma/client";
 import { prisma } from "../../lib/prisma.js";
 import { NotFoundError } from "../../shared/errors.js";
 
 export const suppliersService = {
+  /** Lista proveedores; por defecto solo activos (`activeOnly !== false`). */
   async list(params: { q?: string; take?: number; skip?: number; activeOnly?: boolean }) {
     const where: Prisma.SupplierWhereInput = {};
     if (params.activeOnly !== false) where.isActive = true;
@@ -24,12 +29,14 @@ export const suppliersService = {
     return { items, total, take, skip };
   },
 
+  /** Obtiene un proveedor por ID. */
   async getById(id: string) {
     const supplier = await prisma.supplier.findUnique({ where: { id } });
     if (!supplier) throw new NotFoundError("Proveedor no encontrado");
     return supplier;
   },
 
+  /** Crea proveedor; país por defecto `SV`. */
   async create(data: {
     name: string;
     tradeName?: string | null;
@@ -64,6 +71,7 @@ export const suppliersService = {
     });
   },
 
+  /** Actualiza datos del proveedor o su estado activo. */
   async update(
     id: string,
     data: Partial<{

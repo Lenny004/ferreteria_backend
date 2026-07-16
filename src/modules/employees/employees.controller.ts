@@ -1,3 +1,6 @@
+/**
+ * Capa HTTP para empleados: alta, consulta y actualización de datos laborales.
+ */
 import type { NextFunction, Request, Response } from "express";
 import { z } from "zod";
 import { jsonSuccess } from "../../shared/api-response.js";
@@ -35,6 +38,7 @@ const updateSchema = createSchema.partial().extend({
   isActive: z.boolean().optional(),
 });
 
+/** GET `/` — Lista empleados paginados con búsqueda y filtro de vigencia. */
 export async function list(req: Request, res: Response, next: NextFunction) {
   try {
     const query = listQuerySchema.parse(req.query);
@@ -45,6 +49,7 @@ export async function list(req: Request, res: Response, next: NextFunction) {
   }
 }
 
+/** GET `/:id` — Detalle de un empleado con cargo y departamento. */
 export async function getById(req: Request, res: Response, next: NextFunction) {
   try {
     const employee = await employeesService.getById(req.params.id as string);
@@ -54,6 +59,7 @@ export async function getById(req: Request, res: Response, next: NextFunction) {
   }
 }
 
+/** POST `/` — Crea un empleado; hashea PIN de caja si se envía. */
 export async function create(req: Request, res: Response, next: NextFunction) {
   try {
     const body = createSchema.parse(req.body);
@@ -64,6 +70,7 @@ export async function create(req: Request, res: Response, next: NextFunction) {
   }
 }
 
+/** PATCH `/:id` — Actualización parcial de empleado. */
 export async function update(req: Request, res: Response, next: NextFunction) {
   try {
     const body = updateSchema.parse(req.body);

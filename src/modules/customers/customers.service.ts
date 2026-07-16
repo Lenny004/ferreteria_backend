@@ -1,8 +1,12 @@
+/**
+ * CRUD de clientes (`sales.Customers`) para facturación y punto de venta.
+ */
 import type { Prisma } from "@prisma/client";
 import { prisma } from "../../lib/prisma.js";
 import { NotFoundError } from "../../shared/errors.js";
 
 export const customersService = {
+  /** Lista clientes activos con paginación; `take` máximo 200. */
   async list(params: { q?: string; take?: number; skip?: number }) {
     const where: Prisma.CustomerWhereInput = { isActive: true };
     if (params.q) {
@@ -22,12 +26,18 @@ export const customersService = {
     return { items, total, take, skip };
   },
 
+  /**
+   * Obtiene un cliente por id.
+   *
+   * @throws {NotFoundError} Si no existe.
+   */
   async getById(id: string) {
     const customer = await prisma.customer.findUnique({ where: { id } });
     if (!customer) throw new NotFoundError("Cliente no encontrado");
     return customer;
   },
 
+  /** Crea un cliente; `customerType` por defecto `CF`. */
   async create(data: {
     name: string;
     customerType?: string;
@@ -56,6 +66,11 @@ export const customersService = {
     });
   },
 
+  /**
+   * Actualización parcial de un cliente.
+   *
+   * @throws {NotFoundError} Si no existe.
+   */
   async update(
     id: string,
     data: Partial<{
