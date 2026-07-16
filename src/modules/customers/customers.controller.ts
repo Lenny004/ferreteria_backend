@@ -8,6 +8,15 @@ import { customersService } from "./customers.service.js";
 
 const listQuerySchema = z.object({
   q: z.string().optional(),
+  customerType: z.enum(["CF", "CCF"]).optional(),
+  hasNit: z
+    .enum(["true", "false"])
+    .optional()
+    .transform((v) => (v === undefined ? undefined : v === "true")),
+  hasNrc: z
+    .enum(["true", "false"])
+    .optional()
+    .transform((v) => (v === undefined ? undefined : v === "true")),
   take: z.coerce.number().int().positive().max(200).optional(),
   skip: z.coerce.number().int().nonnegative().optional(),
 });

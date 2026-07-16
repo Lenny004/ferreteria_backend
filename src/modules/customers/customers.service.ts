@@ -7,8 +7,18 @@ import { NotFoundError } from "../../shared/errors.js";
 
 export const customersService = {
   /** Lista clientes activos con paginación; `take` máximo 200. */
-  async list(params: { q?: string; take?: number; skip?: number }) {
+  async list(params: {
+    q?: string;
+    customerType?: string;
+    hasNit?: boolean;
+    hasNrc?: boolean;
+    take?: number;
+    skip?: number;
+  }) {
     const where: Prisma.CustomerWhereInput = { isActive: true };
+    if (params.customerType) where.customerType = params.customerType;
+    if (params.hasNit) where.nit = { not: null };
+    if (params.hasNrc) where.nrc = { not: null };
     if (params.q) {
       where.OR = [
         { name: { contains: params.q, mode: "insensitive" } },
